@@ -1,3 +1,5 @@
 node_modules
 .env
 .build
+
+SOCIAL_MEDIA.md
