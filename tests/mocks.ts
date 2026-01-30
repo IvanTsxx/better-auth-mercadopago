@@ -46,7 +46,10 @@ export const mockLogger = {
 	warn: vi.fn(),
 };
 
-export const createMockContext = (body: any = {}, session: any = {}) => ({
+export const createMockContext = (
+	body: unknown = {},
+	session: Record<string, unknown> = {},
+) => ({
 	body,
 	context: {
 		adapter: mockAdapter,

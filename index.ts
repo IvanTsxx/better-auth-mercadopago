@@ -398,12 +398,12 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 						back_url: backUrl || `${baseUrl}/plan/created`,
 					};
 
-					if (repetitions) {
-						planBody.auto_recurring!.repetitions = repetitions;
+					if (repetitions && planBody.auto_recurring) {
+						planBody.auto_recurring.repetitions = repetitions;
 					}
 
-					if (autoRecurring.freeTrial) {
-						planBody.auto_recurring!.free_trial = {
+					if (autoRecurring.freeTrial && planBody.auto_recurring) {
+						planBody.auto_recurring.free_trial = {
 							frequency: autoRecurring.freeTrial.frequency,
 							frequency_type: autoRecurring.freeTrial.frequencyType,
 						};
@@ -647,7 +647,9 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 						preferenceBody.marketplace_fee = applicationFeeAmount;
 					}
 
-					let preference;
+					let preference:
+						| Awaited<ReturnType<typeof preferenceClient.create>>
+						| undefined;
 					try {
 						preference = await preferenceClient.create({
 							body: preferenceBody,
@@ -789,7 +791,9 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 					const baseUrl = options.baseUrl || ctx.context.baseURL;
 
 					const subscriptionId = generateId();
-					let preapproval;
+					let preapproval:
+						| Awaited<ReturnType<typeof preApprovalClient.create>>
+						| undefined;
 
 					// Option 1: Use existing preapproval plan
 					if (preapprovalPlanId) {
@@ -805,10 +809,9 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 						});
 					}
 					// Option 2: Create subscription directly without plan
-					else {
+					else if (autoRecurring) {
 						// We verified autoRecurring is defined in the validation step above
-						// but TypeScript might need a check or ! assertion
-						const ar = autoRecurring!;
+						const ar = autoRecurring;
 						const autoRecurringBody: PreApprovalCreateData["body"]["auto_recurring"] =
 							{
 								frequency: ar.frequency,
@@ -840,6 +843,13 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 								status: "pending",
 								external_reference: subscriptionId,
 							},
+						});
+					}
+
+					// Ensure preapproval was created
+					if (!preapproval) {
+						throw new APIError("BAD_REQUEST", {
+							message: "Failed to create subscription",
 						});
 					}
 

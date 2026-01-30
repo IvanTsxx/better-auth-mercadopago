@@ -35,8 +35,12 @@ vi.mock("mercadopago", () => {
 vi.mock("better-auth/api", async (importOriginal) => {
 	const actual = await importOriginal();
 	return {
-		...(actual as any),
-		createAuthEndpoint: (path: string, options: any, handler: any) => {
+		...(actual as Record<string, unknown>),
+		createAuthEndpoint: (
+			path: string,
+			options: Record<string, unknown>,
+			handler: unknown,
+		) => {
 			return { path, options, handler };
 		},
 		APIError: class extends Error {
@@ -63,7 +67,9 @@ describe("Mercado Pago Plugin Endpoints", () => {
 	const findEndpoint = (path: string, method: "GET" | "POST") => {
 		const endpoints = plugin.endpoints ? Object.values(plugin.endpoints) : [];
 		return endpoints.find(
-			(e: any) => e.path === path && e.options?.method === method,
+			(e) =>
+				(e as { path?: string; options?: { method?: string } }).path === path &&
+				(e as { options?: { method?: string } }).options?.method === method,
 		);
 	};
 
@@ -105,7 +111,13 @@ describe("Mercado Pago Plugin Endpoints", () => {
 			});
 
 			// Now endpoint.handler should exist due to our mock
-			const handler = (endpoint as any).handler;
+			const handler = (
+				endpoint as unknown as {
+					handler: (
+						ctx: ReturnType<typeof createMockContext>,
+					) => Promise<unknown>;
+				}
+			).handler;
 			const result = await handler(ctx);
 
 			expect(mockPreferenceCreate).toHaveBeenCalledWith(
@@ -165,7 +177,13 @@ describe("Mercado Pago Plugin Endpoints", () => {
 				backUrl: "http://app.com/cb",
 			});
 
-			const handler = (endpoint as any).handler;
+			const handler = (
+				endpoint as unknown as {
+					handler: (
+						ctx: ReturnType<typeof createMockContext>,
+					) => Promise<unknown>;
+				}
+			).handler;
 			const result = await handler(ctx);
 
 			expect(mockPreApprovalCreate).toHaveBeenCalledWith(
@@ -210,7 +228,13 @@ describe("Mercado Pago Plugin Endpoints", () => {
 				backUrl: "http://app.com/cb",
 			});
 
-			const handler = (endpoint as any).handler;
+			const handler = (
+				endpoint as unknown as {
+					handler: (
+						ctx: ReturnType<typeof createMockContext>,
+					) => Promise<unknown>;
+				}
+			).handler;
 			await handler(ctx);
 
 			expect(mockPreApprovalCreate).toHaveBeenCalledWith(
