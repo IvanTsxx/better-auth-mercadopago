@@ -66,5 +66,10 @@
 		"dist",
 		"README.md",
 		"SECURITY.md"
-	]
+	],
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	}
 }
