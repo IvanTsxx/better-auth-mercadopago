@@ -1,8 +1,9 @@
 # Mercado Pago Plugin for Better Auth
 
-![CI Status](https://github.com/better-auth/mercadopago/actions/workflows/ci.yml/badge.svg)
-![NPM Version](https://img.shields.io/npm/v/@better-auth/mercadopago)
-![License](https://img.shields.io/npm/l/@better-auth/mercadopago)
+![CI Status](https://github.com/ivantsxx/better-auth-mercadopago/actions/workflows/ci.yml/badge.svg)
+![NPM Version](https://img.shields.io/npm/v/better-auth-mercadopago)
+![License](https://img.shields.io/npm/l/better-auth-mercadopago)
+
 
 A robust and type-safe Mercado Pago plugin for [Better Auth](https://better-auth.com). seamless integration for one-time payments, subscriptions, and webhook handling.
 
