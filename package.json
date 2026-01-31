@@ -18,7 +18,7 @@
 		"url": "git+https://github.com/ivantsxx/better-auth-mercadopago.git"
 	},
 	"scripts": {
-		"build": "pnpm run typecheck && pnpm run build",
+		"build": "tsc -p tsconfig.json",
 		"typecheck": "tsc --noEmit",
 		"format": "biome check --write",
 		"lint": "biome check",
