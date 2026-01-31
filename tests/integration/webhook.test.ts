@@ -1,29 +1,37 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <no need to use any> */
 import * as crypto from "node:crypto";
 import type { AuthContext } from "better-auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { idempotencyStore } from "../../src/security";
 import { mercadoPagoPlugin } from "../../src/server";
 
 // Mock Mercado Pago SDK
 vi.mock("mercadopago", () => ({
-	MercadoPagoConfig: vi.fn().mockImplementation(() => ({})),
-	Payment: vi.fn().mockImplementation(() => ({
-		get: vi.fn().mockResolvedValue({
-			id: "123456789",
-			external_reference: "ext-ref-123",
-			status: "approved",
-			status_detail: "accredited",
-			transaction_amount: 99.99,
-			payment_method_id: "visa",
-			payment_type_id: "credit_card",
-		}),
-	})),
-	Preference: vi.fn().mockImplementation(() => ({
-		create: vi.fn().mockResolvedValue({
-			id: "pref-123",
-			init_point:
-				"https://www.mercadopago.com/checkout/v1/redirect?pref_id=pref-123",
-		}),
-	})),
+	MercadoPagoConfig: vi.fn().mockImplementation(function MercadoPagoConfig() {
+		return { accessToken: "mock-token" };
+	}),
+	Payment: vi.fn().mockImplementation(function Payment() {
+		return {
+			get: vi.fn().mockResolvedValue({
+				id: "123456789",
+				external_reference: "ext-ref-123",
+				status: "approved",
+				status_detail: "accredited",
+				transaction_amount: 99.99,
+				payment_method_id: "visa",
+				payment_type_id: "credit_card",
+			}),
+		};
+	}),
+	Preference: vi.fn().mockImplementation(function Preference() {
+		return {
+			create: vi.fn().mockResolvedValue({
+				id: "pref-123",
+				init_point:
+					"https://www.mercadopago.com/checkout/v1/redirect?pref_id=pref-123",
+			}),
+		};
+	}),
 }));
 
 describe("Webhook Integration", () => {
@@ -76,6 +84,8 @@ describe("Webhook Integration", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		// Clear idempotency store to prevent test interference
+		idempotencyStore.clear();
 	});
 
 	describe("Payment Notification", () => {

@@ -1,4 +1,4 @@
-﻿import crypto from "node:crypto";
+import crypto from "node:crypto";
 import type { Status } from "better-auth";
 import { APIError } from "better-auth/api";
 
@@ -374,6 +374,10 @@ class IdempotencyStore {
 				this.store.delete(key);
 			}
 		}
+	}
+
+	clear() {
+		this.store.clear();
 	}
 }
 
