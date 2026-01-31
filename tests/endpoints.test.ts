@@ -55,7 +55,7 @@ vi.mock("better-auth/api", async (importOriginal) => {
 });
 
 // Import after mocking
-import { mercadoPagoPlugin } from "../index";
+import { mercadoPagoPlugin } from "../src/server";
 import { createMockContext, mockAdapter } from "./mocks";
 
 describe("Mercado Pago Plugin Endpoints", () => {

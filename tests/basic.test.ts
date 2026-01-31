@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mercadoPagoPlugin } from "../index";
+import { mercadoPagoPlugin } from "../src/server";
 
 describe("mercadopago plugin", () => {
 	it("should return the correct plugin structure", () => {
