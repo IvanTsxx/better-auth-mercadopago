@@ -1,5 +1,11 @@
 # better-auth-mercadopago
 
+## 0.1.6
+
+### Patch Changes
+
+- Fix client plugin structure to properly expose methods through getActions. This resolves the issue where authClient.mercadoPago.createSubscription and other methods were not accessible, even though they were available when destructuring.
+
 ## 0.1.4
 
 ### Patch Changes

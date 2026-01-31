@@ -48,7 +48,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 	const preApprovalPlanClient = new PreApprovalPlan(client);
 
 	return {
-		id: "mercado-pago",
+		id: "mercadoPago",
 
 		schema: {
 			// Customer table - stores MP customer info
@@ -1369,5 +1369,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 	} satisfies BetterAuthPlugin;
 };
 
+// Re-export the client type for convenience
+export type { MercadoPagoClient, MercadoPagoClientActions } from "./client";
 export * from "./client";
 export * from "./types";

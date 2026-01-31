@@ -18,12 +18,115 @@ import type {
 	OAuthUrlResponse,
 } from "./types";
 
+export interface MercadoPagoClientActions {
+	/**
+	 * Get or create a Mercado Pago customer for the authenticated user
+	 */
+	getOrCreateCustomer: (
+		data?: {
+			email?: string;
+			firstName?: string;
+			lastName?: string;
+		},
+		fetchOptions?: BetterFetchOption,
+	) => Promise<{ customer: MercadoPagoCustomerRecord }>;
+
+	/**
+	 * Create a payment and get checkout URL
+	 */
+	createPayment: (
+		data: CreatePaymentParams,
+		fetchOptions?: BetterFetchOption,
+	) => Promise<CreatePaymentResponse>;
+
+	/**
+	 * Create a marketplace payment with automatic split
+	 */
+	createMarketplacePayment: (
+		data: CreatePaymentParams,
+		fetchOptions?: BetterFetchOption,
+	) => Promise<CreatePaymentResponse>;
+
+	/**
+	 * Create a subscription with recurring payments
+	 */
+	createSubscription: (
+		data: CreateSubscriptionParams,
+		fetchOptions?: BetterFetchOption,
+	) => Promise<CreateSubscriptionResponse>;
+
+	/**
+	 * Cancel a subscription
+	 */
+	cancelSubscription: (
+		data: { subscriptionId: string },
+		fetchOptions?: BetterFetchOption,
+	) => Promise<{ success: boolean }>;
+
+	/**
+	 * Create a reusable preapproval plan (subscription template)
+	 */
+	createPreapprovalPlan: (
+		data: CreatePreapprovalPlanParams,
+		fetchOptions?: BetterFetchOption,
+	) => Promise<CreatePreapprovalPlanResponse>;
+
+	/**
+	 * List all preapproval plans
+	 */
+	listPreapprovalPlans: (
+		fetchOptions?: BetterFetchOption,
+	) => Promise<{ plans: MercadoPagoPreapprovalPlanRecord[] }>;
+
+	/**
+	 * Get payment by ID
+	 */
+	getPayment: (
+		paymentId: string,
+		fetchOptions?: BetterFetchOption,
+	) => Promise<{ payment: MercadoPagoPaymentRecord }>;
+
+	/**
+	 * List all payments for the authenticated user
+	 */
+	listPayments: (
+		params?: { limit?: number; offset?: number },
+		fetchOptions?: BetterFetchOption,
+	) => Promise<{ payments: MercadoPagoPaymentRecord[] }>;
+
+	/**
+	 * List all subscriptions for the authenticated user
+	 */
+	listSubscriptions: (
+		fetchOptions?: BetterFetchOption,
+	) => Promise<{ subscriptions: MercadoPagoSubscriptionRecord[] }>;
+
+	/**
+	 * Get OAuth authorization URL for marketplace sellers
+	 */
+	getOAuthUrl: (
+		params: { redirectUri: string },
+		fetchOptions?: BetterFetchOption,
+	) => Promise<OAuthUrlResponse>;
+
+	/**
+	 * Exchange OAuth code for access token
+	 */
+	exchangeOAuthCode: (
+		data: { code: string; redirectUri: string },
+		fetchOptions?: BetterFetchOption,
+	) => Promise<OAuthTokenResponse>;
+}
+
+// Export the actions type for Better Auth type inference
+export type MercadoPagoClient = MercadoPagoClientActions;
+
 export const mercadoPagoClient = () => {
 	return {
-		id: "mercado-pago",
+		id: "mercadoPago",
 		$InferServerPlugin: {} as ReturnType<typeof mercadoPagoPlugin>,
 
-		getActions: ($fetch) => ({
+		getActions: ($fetch: any): MercadoPagoClientActions => ({
 			/**
 			 * Get or create a Mercado Pago customer for the authenticated user
 			 */
@@ -35,14 +138,11 @@ export const mercadoPagoClient = () => {
 				},
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<{ customer: MercadoPagoCustomerRecord }>(
-					"/mercado-pago/customer",
-					{
-						method: "POST",
-						body: data || {},
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/customer", {
+					method: "POST",
+					body: data || {},
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -67,14 +167,11 @@ export const mercadoPagoClient = () => {
 				data: CreatePaymentParams,
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<CreatePaymentResponse>(
-					"/mercado-pago/payment/create",
-					{
-						method: "POST",
-						body: data,
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/payment/create", {
+					method: "POST",
+					body: data,
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -102,14 +199,11 @@ export const mercadoPagoClient = () => {
 				data: CreatePaymentParams,
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<CreatePaymentResponse>(
-					"/mercado-pago/payment/create",
-					{
-						method: "POST",
-						body: data,
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/payment/create", {
+					method: "POST",
+					body: data,
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -143,14 +237,11 @@ export const mercadoPagoClient = () => {
 				data: CreateSubscriptionParams,
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<CreateSubscriptionResponse>(
-					"/mercado-pago/subscription/create",
-					{
-						method: "POST",
-						body: data,
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/subscription/create", {
+					method: "POST",
+					body: data,
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -167,14 +258,11 @@ export const mercadoPagoClient = () => {
 				data: { subscriptionId: string },
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<{ success: boolean }>(
-					"/mercado-pago/subscription/cancel",
-					{
-						method: "POST",
-						body: data,
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/subscription/cancel", {
+					method: "POST",
+					body: data,
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -207,14 +295,11 @@ export const mercadoPagoClient = () => {
 				data: CreatePreapprovalPlanParams,
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<CreatePreapprovalPlanResponse>(
-					"/mercado-pago/plan/create",
-					{
-						method: "POST",
-						body: data,
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/plan/create", {
+					method: "POST",
+					body: data,
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -231,13 +316,10 @@ export const mercadoPagoClient = () => {
 			 * ```
 			 */
 			listPreapprovalPlans: async (fetchOptions?: BetterFetchOption) => {
-				return await $fetch<{ plans: MercadoPagoPreapprovalPlanRecord[] }>(
-					"/mercado-pago/plans",
-					{
-						method: "GET",
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/plans", {
+					method: "GET",
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -247,13 +329,10 @@ export const mercadoPagoClient = () => {
 				paymentId: string,
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<{ payment: MercadoPagoPaymentRecord }>(
-					`/mercado-pago/payment/${paymentId}`,
-					{
-						method: "GET",
-						...fetchOptions,
-					},
-				);
+				return await $fetch(`/mercado-pago/payment/${paymentId}`, {
+					method: "GET",
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -275,13 +354,10 @@ export const mercadoPagoClient = () => {
 				if (params?.limit) query.set("limit", params.limit.toString());
 				if (params?.offset) query.set("offset", params.offset.toString());
 
-				return await $fetch<{ payments: MercadoPagoPaymentRecord[] }>(
-					`/mercado-pago/payments?${query.toString()}`,
-					{
-						method: "GET",
-						...fetchOptions,
-					},
-				);
+				return await $fetch(`/mercado-pago/payments?${query.toString()}`, {
+					method: "GET",
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -293,13 +369,10 @@ export const mercadoPagoClient = () => {
 			 * ```
 			 */
 			listSubscriptions: async (fetchOptions?: BetterFetchOption) => {
-				return await $fetch<{ subscriptions: MercadoPagoSubscriptionRecord[] }>(
-					`/mercado-pago/subscriptions`,
-					{
-						method: "GET",
-						...fetchOptions,
-					},
-				);
+				return await $fetch(`/mercado-pago/subscriptions`, {
+					method: "GET",
+					...fetchOptions,
+				});
 			},
 
 			/**
@@ -325,7 +398,7 @@ export const mercadoPagoClient = () => {
 				const query = new URLSearchParams();
 				query.set("redirectUri", params.redirectUri);
 
-				return await $fetch<OAuthUrlResponse>(
+				return await $fetch(
 					`/mercado-pago/oauth/authorize?${query.toString()}`,
 					{
 						method: "GET",
@@ -358,14 +431,11 @@ export const mercadoPagoClient = () => {
 				data: { code: string; redirectUri: string },
 				fetchOptions?: BetterFetchOption,
 			) => {
-				return await $fetch<OAuthTokenResponse>(
-					"/mercado-pago/oauth/callback",
-					{
-						method: "POST",
-						body: data,
-						...fetchOptions,
-					},
-				);
+				return await $fetch("/mercado-pago/oauth/callback", {
+					method: "POST",
+					body: data,
+					...fetchOptions,
+				});
 			},
 		}),
 	} satisfies BetterAuthClientPlugin;
