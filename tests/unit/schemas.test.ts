@@ -258,7 +258,6 @@ describe("MercadoPagoPreferenceSchema", () => {
 		});
 	});
 });
-import { MercadoPagoPreferenceSchema } from "../../src/schemas";
 
 describe("MercadoPagoPreferenceSchema", () => {
 	describe("items validation", () => {
@@ -517,4 +516,3 @@ describe("MercadoPagoPreferenceSchema", () => {
 		});
 	});
 });
-

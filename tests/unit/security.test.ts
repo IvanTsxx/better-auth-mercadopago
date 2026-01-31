@@ -1,21 +1,21 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import {
-	rateLimiter,
-	validatePaymentAmount,
-	sanitizeMetadata,
-	validateIdempotencyKey,
-	verifyWebhookSignature,
-	validateCallbackUrl,
-	secureCompare,
 	MercadoPagoError,
 	MercadoPagoErrorCodes,
+	rateLimiter,
+	sanitizeMetadata,
+	secureCompare,
+	validateCallbackUrl,
+	validateIdempotencyKey,
+	validatePaymentAmount,
+	verifyWebhookSignature,
 } from "../../src/security";
 
 describe("Security Module", () => {
 	describe("RateLimiter", () => {
 		beforeEach(() => {
 			// Reset rate limiter state before each test
-			// @ts-ignore - accessing private for testing
+			// @ts-expect-error - accessing private for testing
 			rateLimiter.attempts.clear();
 		});
 
@@ -296,7 +296,7 @@ describe("Security Module", () => {
 		it("should create error with default status code", () => {
 			const error = new MercadoPagoError(
 				"INVALID_CARD",
-				"Card number is invalid"
+				"Card number is invalid",
 			);
 			expect(error.code).toBe("INVALID_CARD");
 			expect(error.message).toBe("Card number is invalid");
@@ -308,7 +308,7 @@ describe("Security Module", () => {
 			const error = new MercadoPagoError(
 				"UNAUTHORIZED",
 				"Invalid API key",
-				401
+				401,
 			);
 			expect(error.statusCode).toBe(401);
 		});
@@ -319,17 +319,13 @@ describe("Security Module", () => {
 				"INVALID_CARD",
 				"Card number is invalid",
 				400,
-				details
+				details,
 			);
 			expect(error.details).toEqual(details);
 		});
 
 		it("should convert to APIError", () => {
-			const error = new MercadoPagoError(
-				"NOT_FOUND",
-				"Payment not found",
-				404
-			);
+			const error = new MercadoPagoError("NOT_FOUND", "Payment not found", 404);
 			const apiError = error.toAPIError();
 			expect(apiError).toBeDefined();
 		});
@@ -343,37 +339,26 @@ describe("Security Module", () => {
 
 		it("should have payment error codes", () => {
 			expect(MercadoPagoErrorCodes.INSUFFICIENT_FUNDS).toBe(
-				"cc_rejected_insufficient_amount"
+				"cc_rejected_insufficient_amount",
 			);
 			expect(MercadoPagoErrorCodes.INVALID_CARD).toBe(
-				"cc_rejected_bad_filled_card_number"
+				"cc_rejected_bad_filled_card_number",
 			);
 		});
 
 		it("should have subscription error codes", () => {
 			expect(MercadoPagoErrorCodes.SUBSCRIPTION_NOT_FOUND).toBe(
-				"subscription_not_found"
+				"subscription_not_found",
 			);
 		});
 	});
 });
-import {
-	rateLimiter,
-	validatePaymentAmount,
-	sanitizeMetadata,
-	validateIdempotencyKey,
-	verifyWebhookSignature,
-	validateCallbackUrl,
-	secureCompare,
-	MercadoPagoError,
-	MercadoPagoErrorCodes,
-} from "../../src/security";
 
 describe("Security Module", () => {
 	describe("RateLimiter", () => {
 		beforeEach(() => {
 			// Reset rate limiter state before each test
-			// @ts-ignore - accessing private for testing
+			// @ts-expect-error - accessing private for testing
 			rateLimiter.attempts.clear();
 		});
 
@@ -654,7 +639,7 @@ describe("Security Module", () => {
 		it("should create error with default status code", () => {
 			const error = new MercadoPagoError(
 				"INVALID_CARD",
-				"Card number is invalid"
+				"Card number is invalid",
 			);
 			expect(error.code).toBe("INVALID_CARD");
 			expect(error.message).toBe("Card number is invalid");
@@ -666,7 +651,7 @@ describe("Security Module", () => {
 			const error = new MercadoPagoError(
 				"UNAUTHORIZED",
 				"Invalid API key",
-				401
+				401,
 			);
 			expect(error.statusCode).toBe(401);
 		});
@@ -677,17 +662,13 @@ describe("Security Module", () => {
 				"INVALID_CARD",
 				"Card number is invalid",
 				400,
-				details
+				details,
 			);
 			expect(error.details).toEqual(details);
 		});
 
 		it("should convert to APIError", () => {
-			const error = new MercadoPagoError(
-				"NOT_FOUND",
-				"Payment not found",
-				404
-			);
+			const error = new MercadoPagoError("NOT_FOUND", "Payment not found", 404);
 			const apiError = error.toAPIError();
 			expect(apiError).toBeDefined();
 		});
@@ -701,18 +682,17 @@ describe("Security Module", () => {
 
 		it("should have payment error codes", () => {
 			expect(MercadoPagoErrorCodes.INSUFFICIENT_FUNDS).toBe(
-				"cc_rejected_insufficient_amount"
+				"cc_rejected_insufficient_amount",
 			);
 			expect(MercadoPagoErrorCodes.INVALID_CARD).toBe(
-				"cc_rejected_bad_filled_card_number"
+				"cc_rejected_bad_filled_card_number",
 			);
 		});
 
 		it("should have subscription error codes", () => {
 			expect(MercadoPagoErrorCodes.SUBSCRIPTION_NOT_FOUND).toBe(
-				"subscription_not_found"
+				"subscription_not_found",
 			);
 		});
 	});
 });
-
