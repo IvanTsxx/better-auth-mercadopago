@@ -183,7 +183,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 		endpoints: {
 			// Get or create customer automatically
 			getOrCreateCustomer: createAuthEndpoint(
-				"/mercado-pago/customer",
+				"/mercado-pago/get-or-create-customer",
 				{
 					method: "POST",
 					requireAuth: true,
@@ -242,7 +242,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// OAuth: Get authorization URL for marketplace sellers
 			getOAuthUrl: createAuthEndpoint(
-				"/mercado-pago/oauth/authorize",
+				"/mercado-pago/get-oauth-url",
 				{
 					method: "GET",
 					requireAuth: true,
@@ -280,7 +280,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// OAuth: Exchange code for access token
 			exchangeOAuthCode: createAuthEndpoint(
-				"/mercado-pago/oauth/callback",
+				"/mercado-pago/exchange-oauth-code",
 				{
 					method: "POST",
 					requireAuth: true,
@@ -362,7 +362,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// Create a reusable preapproval plan (subscription plan)
 			createPreapprovalPlan: createAuthEndpoint(
-				"/mercado-pago/plan/create",
+				"/mercado-pago/create-preapproval-plan",
 				{
 					method: "POST",
 					body: z.object({
@@ -442,7 +442,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// List all preapproval plans
 			listPreapprovalPlans: createAuthEndpoint(
-				"/mercado-pago/plans",
+				"/mercado-pago/list-preapproval-plans",
 				{
 					method: "GET",
 				},
@@ -457,7 +457,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// Create payment preference
 			createPayment: createAuthEndpoint(
-				"/mercado-pago/payment/create",
+				"/mercado-pago/create-payment",
 				{
 					method: "POST",
 					requireAuth: true,
@@ -714,7 +714,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// Create subscription (supports both with and without preapproval plan)
 			createSubscription: createAuthEndpoint(
-				"/mercado-pago/subscription/create",
+				"/mercado-pago/create-subscription",
 				{
 					method: "POST",
 					requireAuth: true,
@@ -881,7 +881,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// Cancel subscription
 			cancelSubscription: createAuthEndpoint(
-				"/mercado-pago/subscription/cancel",
+				"/mercado-pago/cancel-subscription",
 				{
 					method: "POST",
 					requireAuth: true,
@@ -934,7 +934,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// Get payment status
 			getPayment: createAuthEndpoint(
-				"/mercado-pago/payment/:id",
+				"/mercado-pago/get-payment/:id",
 				{
 					method: "GET",
 					requireAuth: true,
@@ -968,7 +968,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// List user payments
 			listPayments: createAuthEndpoint(
-				"/mercado-pago/payments",
+				"/mercado-pago/list-payments",
 				{
 					method: "GET",
 					requireAuth: true,
@@ -998,7 +998,7 @@ export const mercadoPagoPlugin = (options: MercadoPagoPluginOptions) => {
 
 			// List user subscriptions
 			listSubscriptions: createAuthEndpoint(
-				"/mercado-pago/subscriptions",
+				"/mercado-pago/list-subscriptions",
 				{
 					method: "GET",
 					requireAuth: true,
