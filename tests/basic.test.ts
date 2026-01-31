@@ -8,7 +8,7 @@ describe("mercadopago plugin", () => {
 			onSubscriptionUpdate: async () => {}, // Mock callback
 		});
 
-		expect(plugin).toHaveProperty("id", "mercado-pago");
+		expect(plugin).toHaveProperty("id", "mercadopago");
 		expect(plugin).toHaveProperty("endpoints");
 		expect(plugin.endpoints).toHaveProperty("createSubscription");
 		// Add more checks based on actual implementation
