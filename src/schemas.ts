@@ -99,8 +99,8 @@ const ShipmentsSchema = z
 const BackUrlsSchema = z
 	.object({
 		success: z.url().describe("URL de retorno ante pago aprobado."),
-		pending: z.url().describe("URL de retorno ante pago pendiente."),
-		failure: z.url().describe("URL de retorno ante pago cancelado."),
+		pending: z.url().describe("URL de retorno ante pago pendiente.").optional(),
+		failure: z.url().describe("URL de retorno ante pago cancelado.").optional(),
 	})
 	.describe("URLs de retorno del checkout.");
 

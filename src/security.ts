@@ -1,4 +1,4 @@
-import crypto from "node:crypto";
+﻿import crypto from "node:crypto";
 import type { Status } from "better-auth";
 import { APIError } from "better-auth/api";
 
@@ -37,7 +37,15 @@ export function verifyWebhookSignature(params: {
 	const expectedHash = hmac.digest("hex");
 
 	// Compare hashes (constant-time comparison)
-	return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(expectedHash));
+	// Ensure both buffers have the same length before comparing
+	const hashBuffer = Buffer.from(hash);
+	const expectedBuffer = Buffer.from(expectedHash);
+
+	if (hashBuffer.length !== expectedBuffer.length) {
+		return false;
+	}
+
+	return crypto.timingSafeEqual(hashBuffer, expectedBuffer);
 }
 
 /**
@@ -161,7 +169,7 @@ export function validateIdempotencyKey(key: string): boolean {
 	// UUID v4 format or custom format
 	const uuidRegex =
 		/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-	const customRegex = /^[a-zA-Z0-9_-]{8,64}$/;
+	const customRegex = /^[a-zA-Z0-9_-]{1,64}$/;
 
 	return uuidRegex.test(key) || customRegex.test(key);
 }
@@ -400,7 +408,7 @@ export const ValidationRules = {
 	currency: (currency: string): boolean => {
 		const validCurrencies = [
 			"ARS", // Peso argentino
-			"BRL", // Real brasileño
+			"BRL", // Real brasileÃ±o
 			"CLP", // Peso chileno
 			"MXN", // Peso mexicano
 			"COP", // Peso colombiano
